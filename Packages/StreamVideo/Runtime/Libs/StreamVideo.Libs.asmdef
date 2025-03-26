@@ -2,15 +2,17 @@
     "name": "StreamVideo.Libs",
     "rootNamespace": "",
     "references": [
-        "endel.nativewebsocket",
-        "Google.Protobuf"
+        "endel.nativewebsocket"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
+    "overrideReferences": true,
+    "precompiledReferences": [
+      "Google.Protobuf.dll",
+      "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
