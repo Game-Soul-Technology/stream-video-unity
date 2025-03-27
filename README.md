@@ -32,7 +32,7 @@ Stream's Video SDK for Unity allows you to easily build any type of video or aud
 3. Select `Add package from git URL...`
 4. Paste in the following url and click the `Add` button:
 ```
-https://github.com/GetStream/stream-video-unity.git?path=/Packages/StreamVideo
+https://github.com/Game-Soul-Technology/stream-video-unity.git?path=/Packages/StreamVideo
 ```
 
 More information [here](https://getstream.io/video/docs/unity/basics/installation/).
