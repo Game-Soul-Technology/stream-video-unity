@@ -18,12 +18,12 @@ namespace StreamVideo.Core.StatefulModels
         /// A new participant joined the call
         /// </summary>
         event ParticipantJoinedHandler ParticipantJoined;
-        
+
         /// <summary>
         /// A participant left the call
         /// </summary>
         event ParticipantLeftHandler ParticipantLeft;
-        
+
         /// <summary>
         /// A track was added for a participant in the call
         /// </summary>
@@ -38,29 +38,31 @@ namespace StreamVideo.Core.StatefulModels
         /// Notifies that a call participant added a reaction to this call
         /// </summary>
         event CallReactionAddedHandler ReactionAdded;
-        
+
         /// <summary>
         /// Notifies that the <see cref="PinnedParticipants"/> collection was updated
         /// </summary>
         event Action PinnedParticipantsUpdated;
-        
+
         /// <summary>
         /// Recording of this call started
         /// </summary>
         event Action RecordingStarted;
-        
+
         /// <summary>
         /// Recording of this call stopped
         /// </summary>
         event Action RecordingStopped;
-        
+
         /// <summary>
         /// Notifies that the <see cref="SortedParticipants"/> collection was updated
         /// </summary>
         event Action SortedParticipantsUpdated;
 
         Credentials Credentials { get; }
-        
+
+        CallSession Session { get; }
+
         /// <summary>
         /// Participants are users that are currently in the call. You can also get all users associated with the call via <see cref="Members"/>
         /// </summary>
@@ -114,23 +116,24 @@ namespace StreamVideo.Core.StatefulModels
         StreamCallType Type { get; }
 
         bool IsLocalUserOwner { get; }
-        
+
         /// <summary>
         /// Members are users permanently associated with the call. This includes users who haven't joined the call.
         /// So for example you create a call and invite "Jane", "Peter", and "Steven" but only "Jane" joins the call.
         /// All three will be members but only "Jane" will be a participant. You can get call participants with <see cref="Participants"/>
         /// </summary>
         IEnumerable<CallMember> Members { get; }
-        
+
         /// <summary>
         /// Is the call being currently recorded
         /// </summary>
         bool Recording { get; }
-        
+
         /// <summary>
         /// Users that are blocked in this call
         /// </summary>
         IEnumerable<IStreamVideoUser> BlockedUsers { get; }
+
         CallSettings Settings { get; }
         bool Backstage { get; }
 
