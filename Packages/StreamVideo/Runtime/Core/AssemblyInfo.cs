@@ -1,10 +1,12 @@
-﻿#if UNITY_EDITOR || STREAM_TESTS_ENABLED
+﻿using UnityEngine.Scripting;
+#if UNITY_EDITOR || STREAM_TESTS_ENABLED
 using System.Runtime.CompilerServices;
 #endif
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("StreamVideo.EditorTools")]
 [assembly: InternalsVisibleTo("StreamVideo.Tests.Editor")]
+[assembly: Preserve]
 #endif
 
 #if STREAM_TESTS_ENABLED || UNITY_EDITOR
