@@ -1,0 +1,5 @@
+﻿<linker>
+  <assembly fullname="StreamVideo.Core" preserve="all"/>
+  <assembly fullname="StreamVideo.Libs" preserve="all"/>
+  <assembly fullname="Newtonsoft.Json" preserve="all"/>
+</linker>
