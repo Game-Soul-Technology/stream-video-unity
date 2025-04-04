@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StreamVideo.Core.LowLevelClient;
+using UnityEngine.Scripting;
 
 namespace StreamVideo.Core.Serialization
 {
@@ -13,6 +14,11 @@ namespace StreamVideo.Core.Serialization
     internal class EnumeratedStructListConverter<TType> : JsonConverter
         where TType : struct, IEnumeratedStruct<TType>
     {
+        [Preserve]
+        public EnumeratedStructListConverter()
+        {
+        }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             switch (value)
@@ -20,12 +26,13 @@ namespace StreamVideo.Core.Serialization
                 case null:
                     return;
                 case List<TType> enumeratedStructList:
-                    
+
                     writer.WriteStartArray();
                     foreach (var enumeratedStruct in enumeratedStructList)
                     {
                         writer.WriteValue(enumeratedStruct.ToString());
                     }
+
                     writer.WriteEndArray();
                     break;
                 default:

@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using StreamVideo.Core.LowLevelClient;
+using UnityEngine.Scripting;
 
 namespace StreamVideo.Core.Serialization
 {
@@ -11,6 +12,11 @@ namespace StreamVideo.Core.Serialization
     internal class EnumeratedStructConverter<TType> : JsonConverter
         where TType : struct, IEnumeratedStruct<TType>
     {
+        [Preserve]
+        public EnumeratedStructConverter()
+        {
+        }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             switch (value)
