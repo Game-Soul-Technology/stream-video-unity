@@ -20,7 +20,7 @@ namespace StreamVideo.Core.LowLevelClient
 
         public event Action NegotiationNeeded;
         public event Action<RTCIceCandidate, StreamPeerType> IceTrickled;
-        
+
         public event Action<VideoStreamTrack> PublisherVideoTrackChanged;
         public event Action<AudioStreamTrack> PublisherAudioTrackChanged;
 
@@ -215,6 +215,9 @@ namespace StreamVideo.Core.LowLevelClient
             PublisherAudioTrack?.Stop();
             PublisherVideoTrack?.Stop();
 
+            PublisherAudioTrack?.Dispose();
+            PublisherVideoTrack?.Dispose();
+
             _peerConnection.Close();
         }
 
@@ -391,6 +394,7 @@ namespace StreamVideo.Core.LowLevelClient
             }
 
             PublisherAudioTrack.Stop();
+            PublisherAudioTrack.Dispose();
 
             PublisherAudioMediaStream.RemoveTrack(PublisherAudioTrack);
             _peerConnection.RemoveTrack(_audioTransceiver.Sender);
@@ -434,6 +438,7 @@ namespace StreamVideo.Core.LowLevelClient
             }
 
             PublisherVideoTrack.Stop();
+            PublisherAudioTrack.Dispose();
 
             PublisherVideoMediaStream.RemoveTrack(PublisherVideoTrack);
 
