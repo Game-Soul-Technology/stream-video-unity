@@ -212,6 +212,12 @@ namespace StreamVideo.Core.LowLevelClient
             _peerConnection.OnConnectionStateChange -= OnConnectionStateChange;
             _peerConnection.OnTrack -= OnTrack;
 
+            var audioSource = PublisherAudioTrack?.Source;
+            if (audioSource != null)
+            {
+                audioSource.enabled = false;
+            }
+
             PublisherAudioTrack?.Stop();
             PublisherVideoTrack?.Stop();
 
@@ -384,6 +390,11 @@ namespace StreamVideo.Core.LowLevelClient
             _peerConnection.AddTrack(audioTrack, PublisherAudioMediaStream);
 
             PublisherAudioTrack = audioTrack;
+            var audioSource = PublisherAudioTrack.Source;
+            if (audioSource != null)
+            {
+                audioSource.enabled = true;
+            }
         }
 
         private void TryClearPublisherAudioTrack()
@@ -393,11 +404,18 @@ namespace StreamVideo.Core.LowLevelClient
                 return;
             }
 
+            var audioSource = PublisherAudioTrack.Source;
+            if (audioSource != null)
+            {
+                audioSource.enabled = false;
+            }
+
             PublisherAudioTrack.Stop();
             PublisherAudioTrack.Dispose();
 
             PublisherAudioMediaStream.RemoveTrack(PublisherAudioTrack);
             _peerConnection.RemoveTrack(_audioTransceiver.Sender);
+
 
             PublisherAudioTrack = null;
         }
