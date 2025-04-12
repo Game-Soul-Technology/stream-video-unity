@@ -42,13 +42,13 @@ namespace StreamVideoDocsCodeSamples._03_guides
         public void StartStopMicrophone()
         {
             // Enable device to start capturing microphone input
-            _client.AudioDeviceManager.Enable();
+            _client.AudioDeviceManager.EnableAsync();
 
             // Disable device to stop capturing microphone input
-            _client.AudioDeviceManager.Disable();
+            _client.AudioDeviceManager.DisableAsync();
 
             // Set the enabled state by passing a boolean argument
-            _client.AudioDeviceManager.SetEnabled(true);
+            _client.AudioDeviceManager.SetEnabledAsync(true);
         }
 
         public void CheckMicrophoneStatus()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using StreamVideo.Core.LowLevelClient;
 using StreamVideo.Core.Utils;
 using StreamVideo.Libs.Logs;
@@ -19,6 +20,7 @@ namespace StreamVideo.Core.DeviceManagers
                 yield return new MicrophoneDeviceInfo(device);
             }
         }
+
 
         protected override async Task<bool> OnTestDeviceAsync(MicrophoneDeviceInfo device, int msTimeout)
         {
@@ -77,7 +79,10 @@ namespace StreamVideo.Core.DeviceManagers
             //I think the reason was that AudioSource was being captured by an AudioListener but once I've joined the call, this disappeared
             //Check if we can have this AudioSource to be ignored by AudioListener's or otherwise mute it when there is not active call session
 
-            SetEnabled(enable);
+            if (enable)
+            {
+                _ = SetEnabledAsync(true);
+            }
         }
 
         //StreamTodo: https://docs.unity3d.com/ScriptReference/AudioSource-ignoreListenerPause.html perhaps this should be enabled so that AudioListener doesn't affect recorded audio
@@ -87,12 +92,12 @@ namespace StreamVideo.Core.DeviceManagers
         {
         }
 
-        protected override void OnSetEnabled(bool isEnabled)
+        protected override async ValueTask<bool> SetEnabledAsyncImpl(bool isEnabled)
         {
             if (isEnabled && SelectedDevice.IsValid)
             {
                 TryStopRecording(SelectedDevice);
-                
+
                 var targetAudioSource = GetOrCreateTargetAudioSource();
 
                 // StreamTodo: use Microphone.GetDeviceCaps to get min/max frequency -> validate it and pass to Microphone.Start
@@ -101,11 +106,13 @@ namespace StreamVideo.Core.DeviceManagers
                     = Microphone.Start(SelectedDevice.Name, loop: true, lengthSec: 10, AudioSettings.outputSampleRate);
                 targetAudioSource.loop = true;
 
-                using (new DebugStopwatchScope(Logs, "Waiting for microphone to start recording"))
+                var sample = Microphone.GetPosition(SelectedDevice.Name);
+                if (sample <= 0)
                 {
-                    while (!(Microphone.GetPosition(SelectedDevice.Name) > 0))
+                    using (new DebugStopwatchScope(Logs, "Waiting for microphone to start recording"))
                     {
-                        // StreamTodo: add timeout. Otherwise might hang application
+                        await UniTask.WaitUntil(
+                            () => Microphone.GetPosition(SelectedDevice.Name) > 0);
                     }
                 }
 
@@ -118,7 +125,9 @@ namespace StreamVideo.Core.DeviceManagers
             }
 
             RtcSession.TrySetAudioTrackEnabled(isEnabled);
+            return isEnabled;
         }
+
 
         protected override void OnUpdate()
         {
@@ -179,7 +188,7 @@ namespace StreamVideo.Core.DeviceManagers
                 Microphone.End(device.Name);
             }
         }
-        
+
         private void TrySyncMicrophoneAudioSourceReadPosWithMicrophoneWritePos()
         {
             var isRecording = IsEnabled && SelectedDevice.IsValid && Microphone.IsRecording(SelectedDevice.Name) && _targetAudioSource != null;
@@ -187,7 +196,7 @@ namespace StreamVideo.Core.DeviceManagers
             {
                 return;
             }
-            
+
             var microphonePosition = Microphone.GetPosition(SelectedDevice.Name);
             if (microphonePosition >= 0 && _targetAudioSource.timeSamples > microphonePosition)
             {

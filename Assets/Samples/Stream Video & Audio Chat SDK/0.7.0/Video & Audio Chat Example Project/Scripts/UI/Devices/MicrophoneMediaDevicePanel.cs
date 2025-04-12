@@ -10,7 +10,7 @@ namespace StreamVideo.ExampleProject.UI.Devices
         protected override bool IsDeviceEnabled
         {
             get => Client.AudioDeviceManager.IsEnabled;
-            set => Client.AudioDeviceManager.SetEnabled(value);
+            set => Client.AudioDeviceManager.SetEnabledAsync(value);
         }
 
         protected override IEnumerable<MicrophoneDeviceInfo> GetDevices() => Client.AudioDeviceManager.EnumerateDevices();

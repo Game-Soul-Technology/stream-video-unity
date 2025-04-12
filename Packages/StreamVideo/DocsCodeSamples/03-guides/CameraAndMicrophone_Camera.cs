@@ -63,13 +63,13 @@ _client.VideoDeviceManager.SelectDevice(camera, new VideoResolution(500, 500), e
         public void StartStopCamera()
         {
             // Enable device to start capturing camera input
-            _client.VideoDeviceManager.Enable();
+            _client.VideoDeviceManager.EnableAsync();
 
             // Disable device to stop capturing camera input
-            _client.VideoDeviceManager.Disable();
+            _client.VideoDeviceManager.DisableAsync();
 
             // Set the enabled state by passing a boolean argument
-            _client.VideoDeviceManager.SetEnabled(true);
+            _client.VideoDeviceManager.SetEnabledAsync(true);
         }
 
         public void GetLocalParticipantVideoPreview()

@@ -152,10 +152,10 @@ namespace StreamVideoDocsCodeSamples._01_basics
         public void StartStopAudioRecording()
         {
             // Start audio capturing
-            _client.AudioDeviceManager.Enable();
+            _client.AudioDeviceManager.EnableAsync();
 
             // Stop audio capturing
-            _client.AudioDeviceManager.Disable();
+            _client.AudioDeviceManager.DisableAsync();
         }
 
         public void RequestMicrophonePermissionsIOSandWebGL()
@@ -206,10 +206,10 @@ namespace StreamVideoDocsCodeSamples._01_basics
         public void StartStopVideoCapturing()
         {
             // Start video capturing
-            _client.VideoDeviceManager.Enable();
+            _client.VideoDeviceManager.EnableAsync();
 
             // Stop video capturing
-            _client.VideoDeviceManager.Disable();
+            _client.VideoDeviceManager.DisableAsync();
         }
 
         public void RequestCameraPermissionsIOSandWebGL()

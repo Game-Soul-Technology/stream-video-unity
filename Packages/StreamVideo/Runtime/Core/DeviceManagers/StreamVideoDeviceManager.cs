@@ -38,10 +38,10 @@ namespace StreamVideo.Core.DeviceManagers
             {
                 throw new ArgumentException($"{nameof(device)} argument is not valid. The device name is empty.");
             }
-            
+
             var deviceChanged = SelectedDevice != device;
             var newInstanceNeeded = IsNewInstanceNeeded(device, requestedResolution);
-            
+
             if (_activeCamera != null && _activeCamera.isPlaying)
             {
                 _activeCamera.Stop();
@@ -60,7 +60,7 @@ namespace StreamVideo.Core.DeviceManagers
                     SelectedDevice = device;
                 }
             }
-            
+
             if (IsEnabled && enable && _activeCamera != null && !_activeCamera.isPlaying)
             {
                 //OnSetEnabled will not trigger because IsEnabled value didn't change
@@ -68,7 +68,7 @@ namespace StreamVideo.Core.DeviceManagers
                 Client.SetCameraInputSource(_activeCamera);
             }
 
-            SetEnabled(enable);
+            _ = SetEnabledAsync(enable);
         }
 
         //StreamTodo: better to not expose this and make fake tracks for local user. This way every participant is processed exactly the same
@@ -84,7 +84,7 @@ namespace StreamVideo.Core.DeviceManagers
         {
         }
 
-        protected override void OnSetEnabled(bool isEnabled)
+        protected override ValueTask<bool> SetEnabledAsyncImpl(bool isEnabled)
         {
             if (isEnabled && _activeCamera != null && !_activeCamera.isPlaying)
             {
@@ -96,9 +96,11 @@ namespace StreamVideo.Core.DeviceManagers
             {
                 _activeCamera.Stop();
             }
-            
+
             RtcSession.TrySetVideoTrackEnabled(isEnabled);
+            return new ValueTask<bool>(isEnabled);
         }
+
 
         protected override async Task<bool> OnTestDeviceAsync(CameraDeviceInfo device, int msTimeout)
         {
@@ -106,7 +108,7 @@ namespace StreamVideo.Core.DeviceManagers
             try
             {
                 camTexture = new WebCamTexture(device.Name);
-                
+
                 // This can fail and the only result will be Unity logging "Could not start graph" and "Could not pause pControl" - these are logs and not exceptions.
                 camTexture.Play();
 
@@ -131,7 +133,7 @@ namespace StreamVideo.Core.DeviceManagers
                     if (camTexture.didUpdateThisFrame)
                     {
                         var frame = camTexture.GetPixels();
-                        
+
                         if (frame1 == null)
                         {
                             if (!IsFrameBlack(frame))
@@ -157,7 +159,7 @@ namespace StreamVideo.Core.DeviceManagers
 
                     await Task.Delay(1);
                 }
-                
+
                 return isCapturing;
             }
             catch (Exception e)
@@ -183,10 +185,10 @@ namespace StreamVideo.Core.DeviceManagers
                 {
                     _activeCamera.Stop();
                 }
-                
+
                 Object.Destroy(_activeCamera);
             }
-            
+
             base.OnDisposing();
         }
 
@@ -199,7 +201,7 @@ namespace StreamVideo.Core.DeviceManagers
                    _activeCamera.requestedHeight != resolution.Height ||
                    Mathf.Abs(_activeCamera.requestedFPS - fps) < 0.01f;
         }
-        
+
         private static bool AreFramesEqual(IReadOnlyList<Color> frame1, IReadOnlyList<Color> frame2)
         {
             if (frame1.Count != frame2.Count)

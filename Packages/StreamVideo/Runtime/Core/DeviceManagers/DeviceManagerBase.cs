@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using StreamVideo.Core.LowLevelClient;
 using StreamVideo.Libs.Logs;
@@ -48,19 +49,22 @@ namespace StreamVideo.Core.DeviceManagers
             }
         }
 
-        public void Enable() => SetEnabled(true);
-
-        public void Disable() => SetEnabled(false);
-
-        public void SetEnabled(bool isEnabled)
+        public ValueTask EnableAsync(CancellationToken cancellationToken = default)
         {
-            if (IsEnabled == isEnabled)
-            {
-                return;
-            }
+            return SetEnabledAsync(true, cancellationToken);
+        }
 
-            IsEnabled = isEnabled;
-            OnSetEnabled(isEnabled);
+        public ValueTask DisableAsync(CancellationToken cancellationToken = default)
+        {
+            return SetEnabledAsync(false, cancellationToken);
+        }
+
+        public async ValueTask SetEnabledAsync(bool value, CancellationToken cancellationToken = default)
+        {
+            if (IsEnabled == value)
+                return;
+
+            IsEnabled = await SetEnabledAsyncImpl(_isEnabled);
         }
 
         public abstract IEnumerable<TDeviceInfo> EnumerateDevices();
@@ -111,7 +115,7 @@ namespace StreamVideo.Core.DeviceManagers
         protected IInternalStreamVideoClient Client { get; }
         protected ILogs Logs { get; }
 
-        protected abstract void OnSetEnabled(bool isEnabled);
+        protected abstract ValueTask<bool> SetEnabledAsyncImpl(bool isEnabled);
 
         protected abstract Task<bool> OnTestDeviceAsync(TDeviceInfo device, int msTimeout);
 

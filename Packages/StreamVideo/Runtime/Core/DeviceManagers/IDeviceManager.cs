@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StreamVideo.Core.DeviceManagers
@@ -28,17 +29,17 @@ namespace StreamVideo.Core.DeviceManagers
         /// <summary>
         /// START capturing data from the <see cref="SelectedDevice"/>.
         /// </summary>
-        void Enable();
+        ValueTask EnableAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// STOP capturing data from the <see cref="SelectedDevice"/>
         /// </summary>
-        void Disable();
+        ValueTask DisableAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Set enabled state for this device.
         /// </summary>
-        void SetEnabled(bool isEnabled);
+        ValueTask SetEnabledAsync(bool value, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Enumerate all available devices. This list contains all devices exposed by the underlying OS.

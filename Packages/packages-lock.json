@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "06067cd4c83e372310d6f79d1c625f6870ff7a2a"
+    },
     "com.endel.nativewebsocket": {
       "version": "https://github.com/endel/NativeWebSocket.git#upm",
       "depth": 0,
@@ -139,7 +146,8 @@
         "com.unity.webrtc": "3.0.0-pre.6",
         "com.unity.nuget.newtonsoft-json": "3.2.0",
         "org.nuget.google.protobuf": "3.30.1",
-        "com.endel.nativewebsocket": "1.1.5"
+        "com.endel.nativewebsocket": "1.1.5",
+        "com.cysharp.unitask": "2.3.1"
       }
     },
     "net.tnrd.nsubstitute": {

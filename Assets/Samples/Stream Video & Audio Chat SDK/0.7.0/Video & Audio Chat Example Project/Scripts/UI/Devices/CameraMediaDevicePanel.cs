@@ -10,7 +10,7 @@ namespace StreamVideo.ExampleProject.UI.Devices
         protected override bool IsDeviceEnabled
         {
             get => Client.VideoDeviceManager.IsEnabled;
-            set => Client.VideoDeviceManager.SetEnabled(value);
+            set => Client.VideoDeviceManager.SetEnabledAsync(value);
         }
 
         protected override IEnumerable<CameraDeviceInfo> GetDevices() => Client.VideoDeviceManager.EnumerateDevices();

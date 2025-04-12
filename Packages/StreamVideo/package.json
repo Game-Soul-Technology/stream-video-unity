@@ -10,7 +10,8 @@
     "com.unity.webrtc": "3.0.0-pre.6",
     "com.unity.nuget.newtonsoft-json": "3.2.0",
     "org.nuget.google.protobuf": "3.30.1",
-    "com.endel.nativewebsocket": "1.1.5"
+    "com.endel.nativewebsocket": "1.1.5",
+    "com.cysharp.unitask": "2.3.1"
   },
   "keywords": [
     "video chat",
