@@ -176,7 +176,7 @@ namespace StreamVideo.Core.DeviceManagers
             return _targetAudioSource;
         }
 
-        private static void TryStopRecording(MicrophoneDeviceInfo device)
+        private void TryStopRecording(MicrophoneDeviceInfo device)
         {
             if (!device.IsValid)
             {
@@ -186,6 +186,12 @@ namespace StreamVideo.Core.DeviceManagers
             if (Microphone.IsRecording(device.Name))
             {
                 Microphone.End(device.Name);
+            }
+
+            if (_targetAudioSource != null)
+            {
+                _targetAudioSource.Stop();
+                _targetAudioSource.clip = null;
             }
         }
 
