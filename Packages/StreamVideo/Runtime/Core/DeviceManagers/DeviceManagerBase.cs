@@ -64,7 +64,7 @@ namespace StreamVideo.Core.DeviceManagers
             if (IsEnabled == value)
                 return;
 
-            IsEnabled = await SetEnabledAsyncImpl(_isEnabled);
+            IsEnabled = await SetEnabledAsyncImpl(value);
         }
 
         public abstract IEnumerable<TDeviceInfo> EnumerateDevices();
